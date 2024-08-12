@@ -24,7 +24,10 @@ if __name__ == '__main__':
 
     # save
     model_path = Path("./model_repository/distilbert/1/model.pt")
+    model_path.parent.mkdir(exist_ok=True)
     tokenizer_path = Path("./model_repository/tokenizer/resource")
+    tokenizer_path.parent.mkdir(exist_ok=True)
+
     torch.jit.save(traced_model, str(model_path))
     print(f"save model -> {model_path.absolute()}")
     tokenizer.save_pretrained(str(tokenizer_path))
