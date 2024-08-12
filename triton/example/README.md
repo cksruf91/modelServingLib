@@ -35,15 +35,7 @@ docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
   -v ${PWD}/model_repository:/models \
   nvcr.io/nvidia/tritonserver:24.01-py3 \
   tritonserver --model-repository=/models
-  
-docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
-  -v ${PWD}/model_repository:/models \
-  tritonserver:1.0-py \
-  tritonserver --model-repository=/models
-  
-docker run --rm -it -p 8000:8000 -p 8001:8001 -p 8002:8002 \
-  -v ${PWD}/model_repository:/models \
-  tritonserver:1.0-py /bin/bash
+
 # for gpu
 docker run --gpus all --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
   -v ${PWD}/model_repository:/models \

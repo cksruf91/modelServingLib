@@ -101,7 +101,14 @@ ensemble_scheduling {
 # Step 3: Triton Inference Server 생성
 model_repository(host) 를 models(guest) 에 마운팅 하고 api를 실행
 ```shell
+# For CPU
 docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
+  -v ${PWD}/model_repository:/models \
+  tritonserver:v1.0 \
+  tritonserver --model-repository=/models
+
+# For CUDA
+docker run --gpus all --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
   -v ${PWD}/model_repository:/models \
   tritonserver:v1.0 \
   tritonserver --model-repository=/models
