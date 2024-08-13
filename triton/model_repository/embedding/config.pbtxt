@@ -1,6 +1,6 @@
 name: "embedding"
 platform: "ensemble"
-max_batch_size: 0
+max_batch_size: 8
 
 input [
     {
@@ -9,6 +9,7 @@ input [
         dims: [-1]
     }
 ]
+
 output [
     {
         name: "output__0"
@@ -16,6 +17,7 @@ output [
         dims: [-1, -1, 768]
     }
 ]
+
 ensemble_scheduling {
     step [
         {

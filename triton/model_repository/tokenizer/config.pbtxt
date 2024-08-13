@@ -1,6 +1,6 @@
 name: "tokenizer"
 backend: "python"
-max_batch_size: 0
+max_batch_size: 8
 
 input [
     {
@@ -14,11 +14,16 @@ output [
     {
         name: "input_ids"
         data_type: TYPE_INT64
-        dims: [-1, -1]
+        dims: [-1]
     },
     {
         name: "attention_mask"
         data_type: TYPE_INT64
-        dims: [-1, -1]
+        dims: [-1]
     }
 ]
+
+dynamic_batching {
+    max_queue_delay_microseconds: 100000
+    preferred_batch_size: [ 4, 8 ]
+}

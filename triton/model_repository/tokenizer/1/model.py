@@ -26,7 +26,7 @@ class TritonPythonModel:
         for request in requests:
             # binary data typed back to string
             query = [
-                t.decode("UTF-8")
+                t[0].decode("UTF-8")
                 for t in pb_utils.get_input_tensor_by_name(request, "input_text")
                 .as_numpy()
                 .tolist()
