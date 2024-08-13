@@ -16,7 +16,7 @@ docker build . -t tritonserver:v1.0
 ```
 
 ## Configuration Files Set Up 
-set up configure file like below
+configure file 셋업 방법
 ```text
 model_repository
     L {model name}  # general model
@@ -34,8 +34,6 @@ model_repository
 
 ## Python-Backend Model
 python-backend 모델 생성 코드 [참조](https://github.com/triton-inference-server/python_backend?tab=readme-ov-file#usage)
-> **Note**
-> '''triton_python_backend_utils''' 은 설치 하지 않아도 docker image 안에 내장 되어 있음
 ```python
 import triton_python_backend_utils as pb_utils
 
@@ -65,6 +63,8 @@ class TritonPythonModel:
         """ [optional] is called only once when the model is being unloaded """
         print('Cleaning up...')
 ```
+**Note**   
+```triton_python_backend_utils``` 은 설치 하지 않아도 docker image 안에 내장 되어 있음
 
 ## Model Ensemble
 ```config.pbtxt``` 파일에 ```ensemble_scheduling``` 필드에 정의
@@ -145,5 +145,26 @@ outputs = httpclient.InferRequestedOutput("output__0", binary_data=True)
 
 client = httpclient.InferenceServerClient(url="localhost:8000")
 result = client.infer(model_name='embedding', inputs=[input_text], outputs=[outputs])
-result.as_numpy('output__0').shape
+print(result.as_numpy('output__0').shape)
 ```
+
+# ETC
+**Note**   
+model input data 사이즈가 일정하지 않으면 dynamic batching 수행을 효율적으로 할 수 없다.   
+때문에 토크나이저를 사용하면서 dynamic batching 을 사용한다면 token을 고정길이로 패딩할 것을 고려해야 한다.   
+단, 경우에 따라 데이터 사이즈 증가로 속도가 느려질 수 있다
+
+```python
+from typing import Dict
+
+import numpy as np
+from transformers import AutoTokenizer, TensorType
+
+tokenizer = AutoTokenizer.from_pretrained('...')
+
+query = ['Some text to tokenizing']
+tokens: Dict[str, np.ndarray] = tokenizer(
+    text=query, return_tensors=TensorType.NUMPY, padding='max_length', truncation=True, max_length=100
+)
+```
+_고정 길이 패딩 예시_
