@@ -149,6 +149,10 @@ print(result.as_numpy('output__0').shape)
 ```
 
 # ETC
+Dynamic batching 사용 전후 Throughput 비교 결과
+
+<img src="../locust/triton/DynamicBatchTest.jpg" width="1000px" height="500px" title="DynamicBatchTest"/>
+
 **Note**   
 model input data 사이즈가 일정하지 않으면 dynamic batching 수행을 효율적으로 할 수 없다.   
 때문에 토크나이저를 사용하면서 dynamic batching 을 사용한다면 token을 고정길이로 패딩할 것을 고려해야 한다.   
