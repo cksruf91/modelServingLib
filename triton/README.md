@@ -4,7 +4,8 @@ TritonServer Tutorial
 # Step 1: Export the model
 model 및 tokenizer 생성
 ```shell
-python export.py
+# 프로젝트 root dir 에서
+python export.py --triton
 ```
 
 # Step 2: Set Up Triton Inference Server
