@@ -1,6 +1,8 @@
 import os
+import string
 from typing import List, Dict
 
+import numpy as np
 import torch
 from transformers import DistilBertTokenizer
 from ts.torch_handler.base_handler import BaseHandler
@@ -14,6 +16,7 @@ class EmbeddingHandler(BaseHandler):
         self.initialized = False
         self.model = None
         self.tokenizer = None
+        self.label = {i: s for i, s in enumerate(string.ascii_uppercase)}
 
     def initialize(self, context):
         """
@@ -32,11 +35,12 @@ class EmbeddingHandler(BaseHandler):
         line = data[0]
         data = line.get("data") or line.get("body")
         text = data.get('text')
+        print(f'request: {text}')
         if isinstance(text, (bytes, bytearray)):
             text = text.decode("utf-8")
 
         tokens: Dict[str, torch.Tensor] = self.tokenizer(
-            text=text, return_tensors='pt', padding=True
+            text=text, return_tensors='pt', padding='max_length', truncation=True, max_length=100
         ).to(self.device)
         return tokens
 
@@ -44,8 +48,19 @@ class EmbeddingHandler(BaseHandler):
         pred = self.model(**data)
         return pred
 
-    def postprocess(self, pred):
-        return pred[0].detach().cpu().numpy().tolist()
+    def postprocess(self, pred) -> List[Dict]:
+        pred = pred.detach().cpu().numpy().astype(np.float64)  # float32 는 json 변환이 안됨
+        print(f"output : {pred.shape}")
+        indices = np.argsort(pred, axis=1)
+        classes = list(np.vectorize(self.label.get)(indices))  # index -> label mapping
+        values = list(np.sort(pred, axis=1))
+
+        response = []
+        for i in range(pred.shape[0]):
+            response.append(
+                {c: v for c, v in zip(classes[i], values[i])}
+            )
+        return response
 
     def handle(self, data, context):
         data = self.preprocess(data)

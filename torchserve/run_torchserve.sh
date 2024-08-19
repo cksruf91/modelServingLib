@@ -1,8 +1,8 @@
 torch-model-archiver \
-  --model-name embedding_model \
+  --model-name cls_model \
   --version 1.0 \
   --serialized-file ml/model/model.pt \
-  --handler embedding_handler.py \
+  --handler cls_handler.py \
   --export-path model_store \
   -f \
   --requirements-file ../requirements.txt \
@@ -10,6 +10,7 @@ torch-model-archiver \
 
 torchserve --start --foreground \
   --model-store model_store \
-  --models embedding=embedding_model.mar \
+  --models cls=cls_model.mar \
+  --ts-config ./config/cpu_config.properties \
   --no-config-snapshots \
   --disable-token-auth

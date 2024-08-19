@@ -1,29 +1,18 @@
+from typing import Dict
+
 from locust import HttpUser, task, between
 
 
 class LocustUser(HttpUser):
     wait_time = between(0.1, 0.4)
-    embedding_endpoint = "/v2/models/cls/versions/1/infer"
+    embedding_endpoint = "/predictions/cls"
     abstract = True
 
     @staticmethod
-    def _get_body(text):
-        data = [
-            [text],
-        ]
-        shape = [len(data), len(data[0])]
-        body = {
-            "name": "cls",
-            "inputs": [
-                {
-                    "name": "input_text",
-                    "shape": shape,
-                    "datatype": "BYTES",
-                    "data": data
-                }
-            ]
+    def _get_body(text: str) -> Dict:
+        return {
+            "text": text
         }
-        return body
 
 
 class User1(LocustUser):
