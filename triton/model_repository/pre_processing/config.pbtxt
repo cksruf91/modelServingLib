@@ -1,4 +1,4 @@
-name: "tokenizer"
+name: "pre_processing"
 backend: "python"
 max_batch_size: 8
 
@@ -22,7 +22,3 @@ output [
         dims: [-1]
     }
 ]
-
-dynamic_batching {
-    max_queue_delay_microseconds: 1000000
-}

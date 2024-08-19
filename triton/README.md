@@ -119,13 +119,13 @@ docker run --gpus all --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
 # Step 4: Test Api
 using curl 
 ```shell
-curl -X POST http://localhost:8000/v2/models/embedding/versions/1/infer \
+curl -X POST http://localhost:8000/v2/models/cls/versions/1/infer \
    -H 'Content-Type: application/json' \
-   -d '{"name": "embedding", "inputs": [{"name": "input_text", "shape": [2, 1], "datatype": "BYTES", "data": [["슈퍼 엔저 장기화에…한국 수출∙경상수지에 비상등"], ["엔저 기조 끝날까… 기나긴 하락 끝에 엔-원 환율 반등"]]}]}'
+   -d '{"name": "embedding", "inputs": [{"name": "input_text", "shape": [1, 1], "datatype": "BYTES", "data": [["슈퍼 엔저 장기화에…한국 수출∙경상수지에 비상등"]]}]}'
 
-curl -X POST http://localhost:8000/v2/models/tokenizer/versions/1/infer \
+curl -X POST http://localhost:8000/v2/models/pre_processing/versions/1/infer \
    -H 'Content-Type: application/json' \
-   -d '{"name": "embedding", "inputs": [{"name": "input_text", "shape": [2, 1], "datatype": "BYTES", "data": [["슈퍼 엔저 장기화에…한국 수출∙경상수지에 비상등"], ["엔저 기조 끝날까… 기나긴 하락 끝에 엔-원 환율 반등"]]}]}'
+   -d '{"name": "embedding", "inputs": [{"name": "input_text", "shape": [1, 1], "datatype": "BYTES", "data": [["슈퍼 엔저 장기화에…한국 수출∙경상수지에 비상등"]]}]}'
 ```
 
 using client library 
@@ -134,19 +134,19 @@ import tritonclient.http as httpclient
 import numpy as np
 
 text = [
-    ['슈퍼 엔저 장기화에…한국 수출∙경상수지에 비상등'.encode('utf-8')],
-    ['엔저 기조 끝날까… 기나긴 하락 끝에 엔-원 환율 반등'.encode('utf-8')]
+    ['슈퍼 엔저 장기화에…한국 수출∙경상수지에 비상등'.encode('utf-8')]
 ]
 text = np.array(text, dtype=np.bytes_)
 
 input_text = httpclient.InferInput("input_text", list(text.shape), datatype="BYTES")
 input_text.set_data_from_numpy(text, binary_data=True)
 
-outputs = httpclient.InferRequestedOutput("output__0", binary_data=True)
+classes = httpclient.InferRequestedOutput("class", binary_data=True)
+prob = httpclient.InferRequestedOutput("prob", binary_data=True)
 
 client = httpclient.InferenceServerClient(url="localhost:8000")
-result = client.infer(model_name='embedding', inputs=[input_text], outputs=[outputs])
-print(result.as_numpy('output__0').shape)
+result = client.infer(model_name='cls', inputs=[input_text], outputs=[classes, prob])
+print(result.as_numpy('class'))
 ```
 
 # ETC

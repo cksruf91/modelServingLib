@@ -3,7 +3,7 @@ import warnings
 from pathlib import Path
 
 import torch
-from transformers import DistilBertTokenizer, DistilBertModel
+from transformers import ElectraModel, ElectraTokenizer
 
 
 class Args(argparse.ArgumentParser):
@@ -21,19 +21,29 @@ class Args(argparse.ArgumentParser):
         self.bentoml: bool = self._ns.bentoml
 
 
+class TestModel(ElectraModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._pooling = torch.nn.Linear(256, 3)
+
+    def forward(self, *args, **kwargs):
+        output = super().forward(*args, **kwargs)
+        return self._pooling(output[0][:, 0, :])
+
+
 class ModelBuilder:
 
     def __init__(self):
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         print(f'------------------- device : {str(device)} ------------------------')
-        self.tokenizer = DistilBertTokenizer.from_pretrained(
-            'monologg/distilkobert',
-            clean_up_tokenization_spaces=False
+        resource = "monologg/koelectra-small-v3-discriminator"
+        self.tokenizer = ElectraTokenizer.from_pretrained(
+            resource, clean_up_tokenization_spaces=False
         )
 
         self.model = (
-            DistilBertModel
-            .from_pretrained("monologg/distilkobert", torchscript=True)
+            TestModel
+            .from_pretrained(resource, torchscript=True)
             .to(device)
         )
 
