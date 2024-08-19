@@ -1,5 +1,6 @@
 FROM pytorch/torchserve:latest
 
-COPY . .
+RUN pip install --upgrade pip
+RUN pip install transformers
 
-ENTRYPOINT ["torchserve", "--start", "--foreground", "--model-store", "model_store", "--models", "em=Embedding.mar", "--no-config-snapshots", "--disable-token-auth"]
+ENTRYPOINT ["torchserve", "--start", "--foreground", "--model-store", "model_store", "--models", "cls=cls_model.mar", "--ts-config", "./config/cpu_config.properties", "--no-config-snapshots", "--disable-token-auth"]

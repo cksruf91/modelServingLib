@@ -77,7 +77,7 @@ torchserve api 실행
 torchserve --start --foreground \
   --model-store model_store \
   --models cls=cls_model.mar \
-  --ts-config cpu_config.properties \
+  --ts-config ./config/cpu_config.properties \
   --no-config-snapshots \
   --disable-token-auth
 
@@ -85,17 +85,19 @@ torchserve --start --foreground \
 torchserve --start --foreground \
   --model-store model_store \
   --models cls=cls_model.mar \
-  --ts-config gpu_config.properties \
+  --ts-config ./config/gpu_config.properties \
   --no-config-snapshots \
   --disable-token-auth
 ```
 
 # Step 4: Build and Running with Docker
+mar 파일 빌드후 
 ```shell
-cp ../requirements.txt .
 docker build -t my_torch_serve:1.0 .
 
-docker run --rm -p 8080:8080 -p 8081:8081 my_torch_serve:1.0
+docker run --rm -p 8080:8080 -p 8081:8081 \
+  -v ${PWD}:/home/model-server \
+  my_torch_serve:1.0
 docker rmi $(docker images | grep none | awk '{print $3}')
 ```
 

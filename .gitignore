@@ -163,3 +163,4 @@ torchserve/example/logs/*
 *.ipynb
 *.pt
 *.jpg
+*.mar
