@@ -36,16 +36,19 @@ class MyHandler(BaseHandler):
 mar 파일 빌드
 ```shell
 torch-model-archiver \
-  --model-name cls_model \                  <- *.mar 파일의 이름이 됨
+  --model-name cls_model \
   --version 1.0 \
-  --serialized-file ml/model/model.pt \ 
+  --serialized-file ml/model/model.pt \
   --handler embedding_handler.py \
-  --export-path model_store \               <- mar 파일 저장 위치
-  -f \                                      <- 이미 mar 파일이 존재할 경우 강제로 업데이트
+  --export-path model_store \
+  -f \
   --requirements-file ../requirements.txt \
   --extra-files "ml/tokenizer/special_tokens_map.json,ml/tokenizer/tokenizer_config.json,ml/tokenizer/vocab.txt"
-                                            <- extra-file 은 실행시 context.system_properties.get("model_dir") 경로에 위치하게 된다
 ```
+* [--model-name] : *.mar 파일의 이름이 됨
+* [--export-path] : mar 파일 저장 위치
+* [-f] : 이미 mar 파일이 존재할 경우 강제로 업데이트 
+* [extra-file] : handler 구동을 위해 필요한 파일들을 지정 해당 파일들은 context.system_properties.get("model_dir") 경로에 위치하게 된다.
 
 ## Dynamic Batching 설정
 `config.properties` 에 각 모델 별로 `batchSize` 와 `maxBatchDelay` 를 설정 하여 Dynamic batching 을 사용 할 수 있다.
@@ -91,15 +94,25 @@ torchserve --start --foreground \
 ```
 
 # Step 4: Build and Running with Docker
-mar 파일 빌드후 
+mar 파일 빌드 후 
+* cpu
 ```shell
 docker build -t my_torch_serve:1.0 .
 
 docker run --rm -p 8080:8080 -p 8081:8081 \
   -v ${PWD}:/home/model-server \
   my_torch_serve:1.0
-docker rmi $(docker images | grep none | awk '{print $3}')
 ```
+* cuda(11.x)
+```shell
+docker build -f Dockerfile.gpu . -t my_torch_serve:1.0
+
+docker run --gpus all --rm -p 8080:8080 -p 8081:8081 \
+  --shm-size=1G \
+  -v ${PWD}:/home/model-server \
+  my_torch_serve:1.0
+```
+* Cuda docker image 가 메모리를 많이 사용하기 때문에 종종 shared memory 부족으로 서비스를 띄우지 못하는 일이 발생한다 `--shm-size` 옵션을 지정하면 해결 할 수 있다.
 
 # Step 5: API test
 ## curl 사용

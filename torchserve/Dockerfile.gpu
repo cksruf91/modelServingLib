@@ -1,0 +1,7 @@
+FROM pytorch/torchserve:0.8.1-gpu
+#  L 0.8.1-gpu : cuda 11.0 버전 호환 이미지
+
+RUN pip install --upgrade pip
+RUN pip install transformers
+
+ENTRYPOINT ["torchserve", "--start", "--foreground", "--model-store", "model_store", "--models", "cls=cls_model.mar", "--ts-config", "./config/gpu_config.properties", "--no-config-snapshots"]
