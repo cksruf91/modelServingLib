@@ -72,8 +72,8 @@ if __name__ == '__main__':
     arg = Args()
     builder = ModelBuilder()
     if arg.triton or arg.all:
-        builder.save_model("./triton/model_repository/distilbert/1/model.pt")
-        builder.save_tokenizer("./triton/model_repository/tokenizer/resource")
+        builder.save_model("./triton/model_repository/forward/1/model.pt")
+        builder.save_tokenizer("./triton/model_repository/pre_processing/resource")
     if arg.torchserve or arg.all:
         builder.save_model("./torchserve/ml/model/model.pt")
         builder.save_tokenizer("./torchserve/ml/tokenizer")

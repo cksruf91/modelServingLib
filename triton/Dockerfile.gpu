@@ -1,0 +1,5 @@
+FROM nvcr.io/nvidia/tritonserver:22.12-pyt-python-py3
+#  L 22.12 : cuda 11.1 버전 호환 이미지
+#  L pyt-python-py3 : pytorch 만 설치된 좀더 가벼운 이미지
+
+RUN pip install transformers

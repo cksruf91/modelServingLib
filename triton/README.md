@@ -13,8 +13,13 @@ python export.py --triton
 For install huggingface(or some other required library)
 create docker image base on Nvidia TritonServer image
 ```shell
-docker build . -t tritonserver:v1.0  
+# for cpu
+docker build . -t tritonserver:v1.0
+
+# for cuda(11.x)  
+docker build -f Dockerfile.gpu . -t tritonserver:v1.0
 ```
+you can check triton docker image version compatibility [here](https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html)
 
 ## Configuration Files Set Up 
 configure file 셋업 방법
@@ -111,8 +116,8 @@ docker run --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
 # For CUDA
 docker run --gpus all --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 \
   -v ${PWD}/model_repository:/models \
-  tritonserver:v1.0 \
-  tritonserver --model-repository=/models
+  --shm-size=1G \
+  tritonserver:v1.0 tritonserver --model-repository=/models
 ```
 
 

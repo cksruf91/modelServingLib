@@ -105,7 +105,7 @@ docker rmi $(docker images | grep none | awk '{print $3}')
 ## curl 사용
 model inference 방법
 ```shell
-curl -X POST http://127.0.0.1:8080/predictions/embedding -H "Content-Type: application/json" --data  "{\"text\": \"sample\"}"
+curl -X POST http://127.0.0.1:8080/predictions/cls -H "Content-Type: application/json" --data  "{\"text\": \"sample\"}"
 ```
 아래 endpoint 를 통해 model 정보를 확인 할 수 있다.
 ```shell
