@@ -39,7 +39,7 @@ torch-model-archiver \
   --model-name cls_model \
   --version 1.0 \
   --serialized-file ml/model/model.pt \
-  --handler embedding_handler.py \
+  --handler cls_handler.py \
   --export-path model_store \
   -f \
   --requirements-file ../requirements.txt \

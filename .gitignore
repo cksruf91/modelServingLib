@@ -159,8 +159,13 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-torchserve/example/logs/*
+torchserve/logs/*
 *.ipynb
-*.pt
 *.jpg
 *.mar
+
+# model resource
+*.pt
+bentoml/ml/tokenizer/*
+triton/model_repository/pre_processing/resource/*
+torchserve/ml/tokenizer/*

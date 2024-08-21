@@ -4,7 +4,7 @@ from typing import List, Dict
 
 import numpy as np
 import torch
-from transformers import DistilBertTokenizer
+from transformers import ElectraTokenizer
 from ts.torch_handler.base_handler import BaseHandler
 
 
@@ -40,7 +40,12 @@ class EmbeddingHandler(BaseHandler):
             text = text.decode("utf-8")
 
         tokens: Dict[str, torch.Tensor] = self.tokenizer(
-            text=text, return_tensors='pt', padding='max_length', truncation=True, max_length=100
+            text=text,
+            return_tensors='pt',
+            padding='max_length',
+            truncation=True,
+            max_length=100,
+            return_token_type_ids=False
         ).to(self.device)
         return tokens
 
@@ -79,4 +84,4 @@ class EmbeddingHandler(BaseHandler):
 
     def _load_tokenizer(self):
         model_dir = self.context.system_properties.get("model_dir")
-        return DistilBertTokenizer.from_pretrained(model_dir)
+        return ElectraTokenizer.from_pretrained(model_dir)
