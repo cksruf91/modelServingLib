@@ -1,0 +1,17 @@
+service: 'service:Classification'
+description: "Description For Service"
+labels:
+  owner: chan
+  project: modelServingLib
+include:
+  - '*.py'
+  - ml/*
+python:
+#  packages:
+#    - torch==2.4.0
+#    - transformers==4.44.0
+  requirements_txt: ../requirements.txt
+docker:
+  distro: debian
+  python_version: "3.10"
+  cuda_version: "11"
