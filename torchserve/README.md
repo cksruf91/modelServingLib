@@ -2,7 +2,9 @@ TorchServe
 ---
 
 # Step 1: Export the model
+model 및 tokenizer 생성
 ```shell
+# 프로젝트 root dir 에서
 python export.py --torchserve
 ```
 # Step 2: Set Up

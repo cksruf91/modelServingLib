@@ -2,7 +2,9 @@ BentoML
 ---
 
 # Step 1: Export the model
+model 및 tokenizer 생성
 ```shell
+# 프로젝트 root dir 에서
 python export.py --bentoml
 ```
 
@@ -40,7 +42,7 @@ class Classification:
     ctx.response.status_code = 200  # status_code, header, cookies 등 접근
     return [{"output": output}]
 ```
-* __bentoml.service__ : resource(cpu, gpu, mem), worker, timeout(request timeout) 등을 설정 할 수 있다
+* __bentoml.service__ : resource(cpu, gpu, mem), worker, timeout(request timeout) 등을 설정 할 수 있다(cpu와 gpu는 같이 세팅할 수 없다. 위는 예시)
 * __bentoml.api__
   * __route__ : api endpoint 이름은 기본적으로 method name 으로 정해지나 route 설정으로 변경 할 수 있다.
   * __batchable__ : Adaptive Batching(Dynamic Batching) 설정을 끄고 켤 수 있음
@@ -48,23 +50,36 @@ class Classification:
   * __batch_dim__ : batch 로 들어오는 데이터가 concat 되는 dimension 을 의미 (input dim, output dim)
 
 # Step 3: Run API
+bentoml 이 설치 되었고 serviceClass 가 적절하게 설정 되어 있다면 아래 명령어로 service 를 생성할 수 있음
 ```shell
 bentoml serve service:Classification
 ```
+* `bentoml serve {FileName}:{ClassName}` 형태
 
 # Step 4: Build and Running with Docker
+
+### build
 bentoml build 명령어는 디렉토리의 `bentofile.yaml` 을 참조한다.
 ```shell
+# 이미 같은 버전으로 빌드된 파일이 있을 경우 제거
 bentoml delete classification:v1.0
+
 bentoml build --version v1.0 
-# for macos
+```
+* __--version__ : model 의 버전이자 docker tag로 사용된다.
+* Build 된 파일은 기본적으로 `~/bentoml/bentos`에 위치 하게 된다.
+* 현재 빌드 되어 있는 bento 파일이 어떤게 있는지 궁금할 경우 `bentoml list` 명령어를 통해 확인 할 수 있다.
+
+### containerize and running 
+```shell
+# Linux
+bentoml containerize classification:v1.0
+# for MacOS
 bentoml containerize --opt platform=linux/amd64 classification:v1.0 
 
 # run container
 docker run --rm -p 3000:3000 classification:v1.0
 ```
-* __--version__ : model 의 버전이자 docker tag로 사용된다.
-* 
 
 # Step 5: Test API
 * swagger ui : http://localhost:3000/
