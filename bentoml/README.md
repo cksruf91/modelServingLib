@@ -58,7 +58,8 @@ bentoml serve service:Classification
 
 # Step 4: Build and Running with Docker
 
-### build
+## BentoML docker image 사용 방법
+### Build Bento 
 bentoml build 명령어는 디렉토리의 `bentofile.yaml` 을 참조한다.
 ```shell
 # 이미 같은 버전으로 빌드된 파일이 있을 경우 제거
@@ -70,7 +71,7 @@ bentoml build --version v1.0
 * Build 된 파일은 기본적으로 `~/bentoml/bentos`에 위치 하게 된다.
 * 현재 빌드 되어 있는 bento 파일이 어떤게 있는지 궁금할 경우 `bentoml list` 명령어를 통해 확인 할 수 있다.
 
-### containerize and running 
+### Containerize and Running 
 ```shell
 # Linux
 bentoml containerize classification:v1.0
@@ -78,6 +79,16 @@ bentoml containerize classification:v1.0
 bentoml containerize --opt platform=linux/amd64 classification:v1.0 
 
 # run container
+docker run --rm -p 3000:3000 classification:v1.0
+```
+
+## [Optional] Custom Docker Image
+* 기본 bentoml docker 이미지가 cuda 11.0 버전을 지원하지 않아 직접 이미지 생성
+```shell
+# build for cpu
+docker build -f Dockerfile.cpu . -t classification:v1.0
+
+# running api
 docker run --rm -p 3000:3000 classification:v1.0
 ```
 

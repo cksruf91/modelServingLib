@@ -14,6 +14,7 @@ Handler class 는 모듈 가장 상단에 있어야 한다.
 ```python
 from ts.torch_handler.base_handler import BaseHandler
 
+
 class MyHandler(BaseHandler):
     def __init__(self):
         super().__init__()
@@ -47,10 +48,10 @@ torch-model-archiver \
   --requirements-file ../requirements.txt \
   --extra-files "ml/tokenizer/special_tokens_map.json,ml/tokenizer/tokenizer_config.json,ml/tokenizer/vocab.txt"
 ```
-* [--model-name] : *.mar 파일의 이름이 됨
-* [--export-path] : mar 파일 저장 위치
-* [-f] : 이미 mar 파일이 존재할 경우 강제로 업데이트 
-* [extra-file] : handler 구동을 위해 필요한 파일들을 지정 해당 파일들은 context.system_properties.get("model_dir") 경로에 위치하게 된다.
+* __--model-name__: *.mar 파일의 이름이 됨
+* __--export-path__ : mar 파일 저장 위치
+* __-f__ : 이미 mar 파일이 존재할 경우 강제로 업데이트 
+* __extra-file__ : handler 구동을 위해 필요한 파일들을 지정 해당 파일들은 context.system_properties.get("model_dir") 경로에 위치하게 된다.
 
 ## Dynamic Batching 설정
 `config.properties` 에 각 모델 별로 `batchSize` 와 `maxBatchDelay` 를 설정 하여 Dynamic batching 을 사용 할 수 있다.

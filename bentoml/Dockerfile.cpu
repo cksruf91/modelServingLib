@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+LABEL authors="chan"
+
+# 시간 동기화
+ENV TZ=Asia/Seoul
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN mkdir -p /home/app
+WORKDIR /home/app
+
+COPY . .
+
+RUN apt-get update
+RUN apt-get install gcc build-essential -y
+RUN pip install -U pip
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["bentoml", "serve", "service:Classification"]
