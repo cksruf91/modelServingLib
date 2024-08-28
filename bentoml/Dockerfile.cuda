@@ -1,0 +1,32 @@
+FROM nvidia/cuda:11.0.3-devel-ubuntu20.04
+LABEL authors="prismo"
+
+# install packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa -y \
+    && apt-get update -y \
+    && apt-get install -y python3.11 python3-pip python3.11-distutils curl gcc locales locales-all vim openjdk-8-jdk python3.11-dev \
+    && rm -rf /var/lib/apt/lists/*
+RUN ln -sf /usr/bin/python3.11 /usr/bin/python \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python3
+
+# install pip
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
+
+# sync local timezone
+ENV TZ=Asia/Seoul
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# set up
+RUN mkdir -p /home/app
+WORKDIR /home/app
+COPY . .
+
+# install python libs
+RUN apt-get install gcc build-essential -y
+RUN pip install -U pip
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["bentoml", "serve", "service:Classification"]

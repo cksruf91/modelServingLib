@@ -1,5 +1,5 @@
 FROM python:3.11-slim
-LABEL authors="chan"
+LABEL authors="prismo"
 
 # 시간 동기화
 ENV TZ=Asia/Seoul

@@ -119,7 +119,7 @@ tabulate==0.9.0
 termcolor==2.4.0
 tokenizers==0.19.1
 tomli_w==1.0.0
-torch==2.4.0
+torch==2.0.1
 torch-model-archiver==0.11.1
 torch-workflow-archiver==0.2.14
 torchserve==0.11.1
