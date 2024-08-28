@@ -14,6 +14,12 @@ class LocustUser(HttpUser):
             "text": [text]
         }
 
+    def on_start(self):
+        self.client.post(
+            self.embedding_endpoint,
+            json=self._get_body('model warm up text')
+        )
+
 
 class User1(LocustUser):
 
