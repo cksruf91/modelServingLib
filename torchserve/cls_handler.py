@@ -4,7 +4,7 @@ from typing import List, Dict
 
 import numpy as np
 import torch
-from transformers import ElectraTokenizer
+from transformers import AutoTokenizer
 from ts.torch_handler.base_handler import BaseHandler
 
 
@@ -84,4 +84,4 @@ class EmbeddingHandler(BaseHandler):
 
     def _load_tokenizer(self):
         model_dir = self.context.system_properties.get("model_dir")
-        return ElectraTokenizer.from_pretrained(model_dir)
+        return AutoTokenizer.from_pretrained(model_dir)

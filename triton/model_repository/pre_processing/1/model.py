@@ -1,15 +1,15 @@
-from typing import List, Dict
-import numpy as np
 from pathlib import Path
+from typing import List, Dict
 
-from transformers import ElectraTokenizer, TensorType
+import numpy as np
 import triton_python_backend_utils as pb_utils
+from transformers import AutoTokenizer, TensorType
 
 
 class TritonPythonModel:
     def __init__(self):
         self.tokenizer_path = Path("/models/pre_processing/resource")
-        self.tokenizer = ElectraTokenizer.from_pretrained(str(self.tokenizer_path))
+        self.tokenizer = AutoTokenizer.from_pretrained(str(self.tokenizer_path))
         self.logger = pb_utils.Logger
 
     def initialize(self, args):

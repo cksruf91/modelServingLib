@@ -6,7 +6,7 @@ torch-model-archiver \
   --export-path model_store \
   -f \
   --requirements-file ../requirements.txt \
-  --extra-files "ml/tokenizer/special_tokens_map.json,ml/tokenizer/tokenizer_config.json,ml/tokenizer/vocab.txt"
+  --extra-files "ml/tokenizer/special_tokens_map.json,ml/tokenizer/tokenizer_config.json,ml/tokenizer/vocab.txt,ml/tokenizer/tokenizer.json"
 
 torchserve --start --foreground \
   --model-store model_store \

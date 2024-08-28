@@ -3,7 +3,7 @@ import warnings
 from pathlib import Path
 
 import torch
-from transformers import ElectraModel, ElectraTokenizer
+from transformers import AutoModel, AutoTokenizer
 
 
 class Args(argparse.ArgumentParser):
@@ -23,14 +23,21 @@ class Args(argparse.ArgumentParser):
         self.cleanup: bool = self._ns.cleanup
 
 
-class TestModel(ElectraModel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._pooling = torch.nn.Linear(256, 3)
+class TestModel(torch.nn.Module):
+
+    def __init__(self, model):
+        super().__init__()
+        self._base = model
+        self._pooling = torch.nn.Linear(768, 3)
+
+    @classmethod
+    def from_pretrained(cls, *args, **kwargs):
+        _base = AutoModel.from_pretrained(*args, **kwargs)
+        return cls(_base)
 
     def forward(self, *args, **kwargs):
-        output = super().forward(*args, **kwargs)
-        return self._pooling(output[0][:, 0, :])
+        output = self._base.forward(*args, **kwargs)
+        return self._pooling(output[1])
 
 
 class ModelBuilder:
@@ -38,8 +45,8 @@ class ModelBuilder:
     def __init__(self):
         device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         print(f'------------------- device : {str(device)} ------------------------')
-        resource = "monologg/koelectra-small-v3-discriminator"
-        self.tokenizer = ElectraTokenizer.from_pretrained(
+        resource = "klue/roberta-base"
+        self.tokenizer = AutoTokenizer.from_pretrained(
             resource, clean_up_tokenization_spaces=False
         )
 

@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import bentoml
 import torch
-from transformers import ElectraTokenizer
+from transformers import AutoTokenizer
 
 EXAMPLE_INPUT = (
     "The sun dips below the horizon, painting the sky orange.",
@@ -26,7 +26,7 @@ class Classification:
     def __init__(self) -> None:
         self.logger = logging.getLogger('bentoml')
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.tokenizer = ElectraTokenizer.from_pretrained('ml/tokenizer')
+        self.tokenizer = AutoTokenizer.from_pretrained('ml/tokenizer')
         model_pt_path = Path('ml/model.pt')
         if not model_pt_path.exists():
             raise RuntimeError(f"Missing the model.pt file -> {model_pt_path.absolute()}")
@@ -52,7 +52,9 @@ class Classification:
         self.logger.info(f'text: {text}')
         tokens = self._tokenize(text)
         output = self.model(**tokens)
-        # TODO output formatting
         output = output.detach().cpu().numpy()[0]
-        result = {self.label[idx]: score for idx, score in enumerate(output)}
-        return [{'output': result}]
+        return [
+            {
+                'output': {self.label[idx]: score for idx, score in enumerate(output)}
+            }
+        ]

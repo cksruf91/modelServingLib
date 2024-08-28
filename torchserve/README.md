@@ -46,7 +46,7 @@ torch-model-archiver \
   --export-path model_store \
   -f \
   --requirements-file ../requirements.txt \
-  --extra-files "ml/tokenizer/special_tokens_map.json,ml/tokenizer/tokenizer_config.json,ml/tokenizer/vocab.txt"
+  --extra-files "ml/tokenizer/special_tokens_map.json,ml/tokenizer/tokenizer_config.json,ml/tokenizer/vocab.txt,ml/tokenizer/tokenizer.json"
 ```
 * __--model-name__: *.mar 파일의 이름이 됨
 * __--export-path__ : mar 파일 저장 위치
