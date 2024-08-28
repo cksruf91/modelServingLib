@@ -87,11 +87,11 @@ docker run --rm -p 3000:3000 classification:v1.0
 ```shell
 # for cpu
 docker build -f Dockerfile.cpu . -t classification:v1.0
-docker run --rm -p 3000:3000 classification:v1.0
+docker run --rm -p 3000:3000 -v ${PWD}:/home/app classification:v1.0
 
 # for cuda
 docker build -f Dockerfile.cuda . -t classification:v1.0
-docker run --gpus all --rm -p 3000:3000 classification:v1.0
+docker run --gpus all --rm -p 3000:3000 -v ${PWD}:/home/app classification:v1.0
 ```
 
 # Step 5: Test API

@@ -22,9 +22,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # set up
 RUN mkdir -p /home/app
 WORKDIR /home/app
-COPY . .
 
 # install python libs
+COPY requirements.txt .
 RUN apt-get install gcc build-essential -y
 RUN pip install -U pip
 RUN pip install -r requirements.txt
