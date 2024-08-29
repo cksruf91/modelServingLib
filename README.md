@@ -43,6 +43,6 @@ modelServingLib
 ## Result
 | server                  | result                                                                                                           |
 |:------------------------|:-----------------------------------------------------------------------------------------------------------------|
-| Triton Inference Server | <img src="locust/benchmark/Triton-200-5-roberta.png" width="800px" height="500px" title="DynamicBatchTest"/>     |
-| TorchServe              | <img src="locust/benchmark/torchserve-200-5-roberta.png" width="800px" height="500px" title="DynamicBatchTest"/> |
-| BentoML                 | <img src="locust/benchmark/bentoml-200-5-roberta.png" width="800px" height="500px" title="DynamicBatchTest"/>    |
+| Triton Inference Server | <img src="benchmark/images/Triton-200-5-roberta.png" width="800px" height="500px" title="DynamicBatchTest"/>     |
+| TorchServe              | <img src="benchmark/images/torchserve-200-5-roberta.png" width="800px" height="500px" title="DynamicBatchTest"/> |
+| BentoML                 | <img src="benchmark/images/bentoml-200-5-roberta.png" width="800px" height="500px" title="DynamicBatchTest"/>    |

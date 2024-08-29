@@ -157,7 +157,7 @@ print(result.as_numpy('class'))
 # ETC
 Dynamic batching 사용 전후 Throughput 비교 결과
 
-<img src="../locust/triton/DynamicBatchTest.jpg" width="1000px" height="500px" title="DynamicBatchTest"/>
+<img src="../benchmark/triton/DynamicBatchTest.jpg" width="1000px" height="500px" title="DynamicBatchTest"/>
 
 **Note**   
 model input data 사이즈가 일정하지 않으면 dynamic batching 수행을 효율적으로 할 수 없다.   

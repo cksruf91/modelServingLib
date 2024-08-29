@@ -1,8 +1,8 @@
 [tool.locust]
 locustfile = "locustfile.py"
 master = false
-host = "http://127.0.0.1:3000"
-users = 15
-spawn-rate = 10
+host = "http://127.0.0.1:8080"
+users = 200
+spawn-rate = 2
 run-time = "3m"
-web-port = 8089
+web-port = 8002
