@@ -12,15 +12,15 @@ EXAMPLE_INPUT = (
 )
 GPU_COUNT = torch.cuda.device_count()
 if GPU_COUNT > 0:
-    RESOURCE = {'gpu': GPU_COUNT}
+    RESOURCE = {'gpu': GPU_COUNT, "memory": "1Gi"}
 else:
-    RESOURCE = {'cpu': 2}
+    RESOURCE = {'cpu': 'cpu_count', "memory": "1Gi"}
 
 
 @bentoml.service(
     resources=RESOURCE,
     workers=1,
-    traffic={"timeout": 10},
+    traffic={"timeout": 3},
 )
 class Classification:
     def __init__(self) -> None:
@@ -46,15 +46,15 @@ class Classification:
     @bentoml.api(
         batchable=True,
         max_batch_size=8,
-        max_latency_ms=300
+        max_latency_ms=1500
     )
     def classification(self, text: List[str] = EXAMPLE_INPUT) -> List[Dict[str, Dict[str, float]]]:
         self.logger.info(f'text: {text}')
         tokens = self._tokenize(text)
         output = self.model(**tokens)
-        output = output.detach().cpu().numpy()[0]
-        return [
-            {
-                'output': {self.label[idx]: score for idx, score in enumerate(output)}
-            }
-        ]
+        result = []
+        for array in output.detach().cpu().numpy():
+            result.append(
+                {'output': {self.label[idx]: score for idx, score in enumerate(array)}}
+            )
+        return result

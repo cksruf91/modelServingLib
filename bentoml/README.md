@@ -47,6 +47,8 @@ class Classification:
   * __route__ : api endpoint 이름은 기본적으로 method name 으로 정해지나 route 설정으로 변경 할 수 있다.
   * __batchable__ : Adaptive Batching(Dynamic Batching) 설정을 끄고 켤 수 있음
     * Adaptive Batching 을 활성화 시켰다면 batch 처리가 가능하도록 input, output 모두 List, np.ndarray 같은 concat 가능한 형태여야 한다.
+  * __max_batch_size__ : 최대 배치 사이즈
+  * __max_latency_ms__ : 최대 지연 길이, 배치가 처리되는 최대 시간을 의미, 배치가 `max_latency_ms` 안에 처리되지 못할때 503 에러를 발생시킨다. 실제 batch input 을 기다리는 시간은 요청량에 따라 유동적으로 조절된다. 
   * __batch_dim__ : batch 로 들어오는 데이터가 concat 되는 dimension 을 의미 (input dim, output dim)
 
 # Step 3: Run API
@@ -90,7 +92,7 @@ docker build -f Dockerfile.cpu . -t classification:v1.0
 docker run --rm -p 3000:3000 -v ${PWD}:/home/app classification:v1.0
 
 # for cuda
-docker build -f Dockerfile.cuda . -t classification:v1.0
+docker build -f Dockerfile.gpu . -t classification:v1.0
 docker run --gpus all --rm -p 3000:3000 -v ${PWD}:/home/app classification:v1.0
 ```
 

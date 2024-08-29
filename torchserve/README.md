@@ -97,17 +97,17 @@ torchserve --start --foreground \
 ```
 
 # Step 4: Build and Running with Docker
-mar 파일 빌드 후 
-* cpu
+mar 파일 빌드 후
 ```shell
-docker build -t my_torch_serve:1.0 .
+# for cpu
+docker build -f Dockerfile.cpu . -t my_torch_serve:1.0
 
 docker run --rm -p 8080:8080 -p 8081:8081 \
   -v ${PWD}:/home/model-server \
   my_torch_serve:1.0
 ```
-* cuda(11.x)
 ```shell
+# for cuda(11.x)
 docker build -f Dockerfile.gpu . -t my_torch_serve:1.0
 
 docker run --gpus all --rm -p 8080:8080 -p 8081:8081 \
