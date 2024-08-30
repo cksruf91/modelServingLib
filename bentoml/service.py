@@ -46,7 +46,7 @@ class Classification:
     @bentoml.api(
         batchable=True,
         max_batch_size=8,
-        max_latency_ms=1500
+        max_latency_ms=3000
     )
     def classification(self, text: List[str] = EXAMPLE_INPUT) -> List[Dict[str, Dict[str, float]]]:
         self.logger.info(f'text: {text}')
