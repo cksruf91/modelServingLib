@@ -6,10 +6,10 @@ from typing import Dict
 from locust import between
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-locust_base = importlib.import_module("locustbase")
+hopper = importlib.import_module("grasshopper")
 
 
-class BentoLocust(locust_base.Grasshopper):
+class BentoHopper(hopper.Grasshopper):
     wait_time = between(0.1, 0.4)
     embedding_endpoint = "/classification"
 
