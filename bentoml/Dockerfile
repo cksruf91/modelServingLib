@@ -1,17 +1,16 @@
-FROM python:3.11-slim
+FROM python:3.11.9-slim
 LABEL authors="prismo"
 
-# 시간 동기화
+# sync local timezone
 ENV TZ=Asia/Seoul
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# set up
 RUN mkdir -p /home/app
 WORKDIR /home/app
 
+# install python libs
 COPY requirements.txt .
-
-RUN apt-get update
-RUN apt-get install gcc build-essential -y
 RUN pip install -U pip
 RUN pip install -r requirements.txt
 
